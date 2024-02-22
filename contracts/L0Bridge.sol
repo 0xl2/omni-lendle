@@ -52,12 +52,33 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
         uint256 srcPoolId;
         uint256 tokenAmt;
         address token;
+        address depositToken;
     }
 
-    constructor(address _sgRouter, address _lendle) {
+    constructor(address _sgRouter) {
         sgRouter = _sgRouter;
+    }
 
-        setLendle(_lendle);
+    function _doSwap(
+        address _from,
+        address _to,
+        uint _fromAmt
+    ) internal returns (uint) {
+        IERC20(_from).approve(address(agni), _fromAmt);
+
+        return
+            agni.exactInputSingle(
+                IAgni.ExactInputSingleParams(
+                    _from,
+                    _to,
+                    500,
+                    address(this),
+                    block.timestamp + 2 hours,
+                    _fromAmt,
+                    0,
+                    0
+                )
+            );
     }
 
     function sgReceive(
@@ -68,17 +89,22 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
         uint256 amountLD,
         bytes memory payload
     ) external payable override {
-        address sender = abi.decode(payload, (address));
+        (address sender, address depositToken) = abi.decode(
+            payload,
+            (address, address)
+        );
 
-        IERC20(token).approve(address(lendle), amountLD);
-        lendle.deposit(token, amountLD, sender, 0);
+        if (token != depositToken)
+            amountLD = _doSwap(token, depositToken, amountLD);
+
+        IERC20(depositToken).approve(address(lendle), amountLD);
+        lendle.deposit(depositToken, amountLD, sender, 0);
     }
 
     function sendRequest(
         RequestParam calldata _param,
         IStargateRouter.lzTxObj calldata _params,
-        bytes calldata _to,
-        bytes calldata _payload
+        bytes calldata _to
     ) external payable {
         IERC20(_param.token).transferFrom(
             msg.sender,
@@ -88,16 +114,18 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
 
         IERC20(_param.token).approve(sgRouter, _param.tokenAmt);
 
+        bytes memory payload = abi.encode(msg.sender, _param.depositToken);
+
         IStargateRouter(sgRouter).swap{value: msg.value}(
             _param.dstChainId,
-            _param.srcPoolId, // 1 => USDC
+            _param.srcPoolId,
             _param.dstPoolId,
             payable(msg.sender),
             _param.tokenAmt,
             0,
             _params,
             _to,
-            _payload
+            payload
         );
     }
 }

@@ -10,4 +10,8 @@ interface ILendle {
     ) external;
 
     function withdraw(address asset, uint256 amount, address to) external;
+
+    function getUserAccountData(
+        address user
+    ) external view returns (uint, uint, uint, uint, uint);
 }
