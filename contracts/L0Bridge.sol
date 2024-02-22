@@ -89,6 +89,8 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
         uint256 amountLD,
         bytes memory payload
     ) external payable override {
+        require(msg.sender == sgRouter);
+
         (address sender, address depositToken) = abi.decode(
             payload,
             (address, address)
