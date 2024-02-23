@@ -15,7 +15,7 @@ describe("Bride contract testing", function () {
   before("Deploy contract", async function () {
     [this.signer, this.alice, this.bob, this.tom] = await ethers.getSigners();
 
-    const router = "0x2F6F07CDcf3588944Bf4C42aC74ff24bF56e7590";
+    const router = "0x296F55F8Fb28E498B858d0BcDA06D955B2Cb3f97";
 
     const TestBridge = await ethers.getContractFactory("L0Bridge");
     this.bridge = await TestBridge.deploy(router);

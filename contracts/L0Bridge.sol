@@ -126,7 +126,7 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
             _param.dstPoolId,
             payable(msg.sender),
             _param.tokenAmt,
-            9000000,
+            0,
             _params,
             _to,
             payload

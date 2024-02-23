@@ -12,7 +12,7 @@ const mantleUSDT = "0x201EBa5CC46D216Ce6DC03F6a759e8E766e956aE"
 const composerRouter = "0xeCc19E177d24551aA7ed6Bc6FE566eCa726CC8a9"
 const whaleAddr = "0xaAD15d9017F800CdF67C968aE520DcA76e233531"
 
-describe.only("Bride contract testing", function () {
+describe("Bride contract testing", function () {
     before("Deploy contract", async function () {
         [this.signer, this.alice, this.bob, this.tom] = await ethers.getSigners();
 
