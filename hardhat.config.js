@@ -10,34 +10,18 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        // url: "https://bsc-testnet.public.blastapi.io",
-        // url: "https://rpc.ankr.com/eth_goerli",
-        // url: "https://rpc.ankr.com/polygon_mumbai",
-        // url: "https://1rpc.io/bnb",
-        url: "https://rpc.ankr.com/mantle",
+        // url: "https://rpc.ankr.com/mantle",
+        url: "https://rpc.ankr.com/polygon",
         enabled: true,
-        // blockNumber: 25710942,
       },
     },
-    bnb_test: {
-      url: "https://bsc-testnet.public.blastapi.io",
-      accounts: [config.p_key],
-    },
-    goerli: {
-      url: "https://rpc.ankr.com/eth_goerli",
-      accounts: [config.p_key],
-    },
-    mumbai: {
-      url: "https://rpc.ankr.com/polygon_mumbai",
-      accounts: [config.p_key],
-    },
-    bsc: {
-      url: "https://1rpc.io/bnb",
-      accounts: [config.p_key],
-    },
     polygon: {
-      url: `https://polygon-mainnet.g.alchemy.com/v2/${config.alchemy_key}`,
+      url: `https://rpc.ankr.com/polygon`,
       accounts: [config.p_key],
+    },
+    mantle: {
+      url: `https://rpc.ankr.com/mantle`,
+      accounts: [config.mantle_key],
     },
   },
   etherscan: {

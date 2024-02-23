@@ -11,7 +11,7 @@ const WETH = "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111"
 const WMNT =
   "0x78c1b0C915c4FAA5FffA6CAbf0219DA63d7f4cb8"
 
-describe.only("Bride contract testing", function () {
+describe("Bride contract testing", function () {
   before("Deploy contract", async function () {
     [this.signer, this.alice, this.bob, this.tom] = await ethers.getSigners();
 

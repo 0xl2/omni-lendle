@@ -6,6 +6,8 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import "./BaseBridge.sol";
 
+import "hardhat/console.sol";
+
 interface IStargateRouter {
     struct lzTxObj {
         uint256 dstGasForCall;
@@ -89,8 +91,6 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
         uint256 amountLD,
         bytes memory payload
     ) external payable override {
-        require(msg.sender == sgRouter);
-
         (address sender, address depositToken) = abi.decode(
             payload,
             (address, address)
@@ -108,6 +108,8 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
         IStargateRouter.lzTxObj calldata _params,
         bytes calldata _to
     ) external payable {
+        require(msg.value > 0, "Insufficient gas fee");
+
         IERC20(_param.token).transferFrom(
             msg.sender,
             address(this),
@@ -124,10 +126,17 @@ contract L0Bridge is IStargateReceiver, BaseBridge {
             _param.dstPoolId,
             payable(msg.sender),
             _param.tokenAmt,
-            0,
+            9000000,
             _params,
             _to,
             payload
+        );
+    }
+
+    function withdrawToken(address token) external onlyOwner {
+        IERC20(token).transfer(
+            msg.sender,
+            IERC20(token).balanceOf(address(this))
         );
     }
 }
