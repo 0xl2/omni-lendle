@@ -1,4 +1,4 @@
-# Omnichain feature for [Lendle](https://app.lendle.xyz/)
+# Cross-chain deposit for [Lendle](https://app.lendle.xyz/)
 
 ### To run
 
